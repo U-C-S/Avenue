@@ -1,0 +1,7 @@
+[package]
+name = "avenue"
+version = "0.0.1-init"
+edition = "2024"
+
+[dependencies]
+bevy = { version = "0.19", default-features = false, features = ["3d", "ui"] }
