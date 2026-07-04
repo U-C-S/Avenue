@@ -1,10 +1,7 @@
-use bevy::prelude::*;
+use bevy::{math::VectorSpace, prelude::*};
 
 use crate::{
-    INITIAL_ENTITY_COUNT, WORLD_HALF_SIZE,
-    camera::{CameraRig, TopDownCamera, camera_transform},
-    entities::{GameAssets, SpawnCounter, spawn_autonomous_entity},
-    ui::StatusText,
+    INITIAL_ENTITY_COUNT, WORLD_HALF_SIZE, camera::{CameraRig, TopDownCamera, camera_transform}, entities::{GameAssets, SpawnCounter, spawn_autonomous_entity, spawn_playable_entity}, ui::StatusText,
 };
 
 pub(crate) fn setup(
@@ -62,6 +59,8 @@ pub(crate) fn setup(
         ],
     };
 
+    spawn_playable_entity(&mut commands, &entity_assets, counter.next_id, Vec2::ZERO);
+    counter.next_id += 1;
     for _ in 0..INITIAL_ENTITY_COUNT {
         spawn_autonomous_entity(&mut commands, &entity_assets, counter.next_id, Vec2::ZERO);
         counter.next_id += 1;
@@ -82,6 +81,18 @@ pub(crate) fn setup(
         Node {
             position_type: PositionType::Absolute,
             top: px(12),
+            left: px(12),
+            ..default()
+        },
+        StatusText,
+    ));
+
+    commands.spawn((
+        Name::new("Control Instructions"),
+        Text::new("WASD for camera, IJKL for player, N to spawn entity"),
+        Node {
+            position_type: PositionType::Absolute,
+            bottom: px(12),
             left: px(12),
             ..default()
         },

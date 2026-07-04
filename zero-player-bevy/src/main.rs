@@ -9,6 +9,8 @@ use entities::{SpawnCounter, add_entity_at_camera_target, animate_entities};
 use scene::setup;
 use ui::update_status_text;
 
+use crate::entities::update_player;
+
 pub(crate) const WORLD_HALF_SIZE: f32 = 18.0;
 pub(crate) const INITIAL_ENTITY_COUNT: u32 = 8;
 
@@ -34,6 +36,7 @@ fn main() {
                 add_entity_at_camera_target,
                 animate_entities,
                 update_status_text,
+                update_player,
             ),
         )
         .run();

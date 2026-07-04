@@ -26,6 +26,13 @@ pub(crate) struct AutonomousEntity {
     phase: f32,
 }
 
+#[derive(Component)]
+pub(crate) struct PlayableEntity {
+    id: u32,
+    position: Vec2,
+    radius: f32,
+}
+
 pub(crate) fn spawn_autonomous_entity(
     commands: &mut Commands,
     assets: &GameAssets,
@@ -51,6 +58,28 @@ pub(crate) fn spawn_autonomous_entity(
             bob_speed: 1.8 + (id % 4) as f32 * 0.18,
             bob_height: 0.12 + (id % 3) as f32 * 0.035,
             phase,
+        },
+    ));
+}
+
+pub(crate) fn spawn_playable_entity(
+    commands: &mut Commands,
+    assets: &GameAssets,
+    id: u32,
+    position: Vec2,
+) {
+    let radius = 1.0;
+    let material = assets.entity_materials[0].clone();
+
+    commands.spawn((
+        Name::new(format!("Playable entity {id}")),
+        Mesh3d(assets.entity_mesh.clone()),
+        MeshMaterial3d(material),
+        Transform::from_xyz(position.x + radius, 0.55, position.y),
+        PlayableEntity {
+            id,
+            position,
+            radius,
         },
     ));
 }
@@ -89,5 +118,30 @@ pub(crate) fn animate_entities(
         );
         transform.rotation = Quat::from_rotation_y(-angle + entity.id as f32 * PI * 0.05)
             * Quat::from_rotation_x(tilt);
+        transform.scale = Vec3::splat(1.0 + ((elapsed * 4.0 + entity.phase).sin() * 0.8) + 0.5);
     }
+}
+
+pub(crate) fn update_player(
+    time: Res<Time>,
+    mut player_transform: Single<&mut Transform, With<PlayableEntity>>,
+    keyboard: Res<ButtonInput<KeyCode>>,
+) {
+    let mut position = player_transform.translation;
+    let delta_time = time.delta_secs();
+    let speed = 5.0 * delta_time;
+    if keyboard.pressed(KeyCode::KeyI) {
+        position.z += speed;
+    }
+    if keyboard.pressed(KeyCode::KeyK) {
+        position.z -= speed;
+    }
+    if keyboard.pressed(KeyCode::KeyJ) {
+        position.x -= speed;
+    }
+    if keyboard.pressed(KeyCode::KeyL) {
+        position.x += speed;
+    }
+
+    player_transform.translation = Vec3::new(position.x, position.y, position.z);
 }
