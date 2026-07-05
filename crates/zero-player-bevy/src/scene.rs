@@ -1,7 +1,10 @@
 use bevy::{math::VectorSpace, prelude::*};
 
 use crate::{
-    INITIAL_ENTITY_COUNT, WORLD_HALF_SIZE, camera::{CameraRig, TopDownCamera, camera_transform}, entities::{GameAssets, SpawnCounter, spawn_autonomous_entity, spawn_playable_entity}, ui::StatusText,
+    INITIAL_ENTITY_COUNT, WORLD_HALF_SIZE,
+    camera::{CameraRig, TopDownCamera, camera_transform},
+    entities::{GameAssets, SpawnCounter, spawn_autonomous_entity, spawn_playable_entity},
+    ui::StatusText,
 };
 
 pub(crate) fn setup(
@@ -13,7 +16,7 @@ pub(crate) fn setup(
 ) {
     commands.insert_resource(GlobalAmbientLight {
         color: Color::srgb(0.64, 0.72, 0.86),
-        brightness: 350.0,
+        brightness: 3500.0,
         ..default()
     });
 
