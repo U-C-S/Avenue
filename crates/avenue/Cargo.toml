@@ -4,7 +4,11 @@ version = "0.0.1-init"
 edition = "2024"
 
 [dependencies]
-bevy = { version = "0.20.0", default-features = false, features = ["3d", "ui"] }
+bevy = { version = "0.20.0", default-features = false, features = [
+  "3d",
+  "ui",
+  "free_camera",
+] }
 
 [profile.dev]
 opt-level = 1
